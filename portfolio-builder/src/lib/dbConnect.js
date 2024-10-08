@@ -3,7 +3,9 @@ import mongoose from 'mongoose'
  const connectToDB=async()=>{
     const MONGODB_URI=process.env.MONGODB_URI
     try{
-        await mongoose.connect(MONGODB_URI);
+        await mongoose.connect(MONGODB_URI,{
+            dbName:"portfolioBuilder",
+        });
         console.log("db connected succesfully")
     }catch(e){
         console.log(e);

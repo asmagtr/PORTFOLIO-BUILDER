@@ -4,9 +4,10 @@ import userModel from '@/models/user';
 import {verifyPassword, generateToken } from '@/lib/auth'; 
 
 export async function POST(req) {
-  await connectToDB(); 
+
 
   const { email, password } = await req.json();
+
   if(!email){
     return new Response(JSON.stringify({ message: 'Provide an email' }), { status: 400 })
   }
@@ -16,6 +17,7 @@ export async function POST(req) {
   }
 
   try{
+    await connectToDB(); 
     const user = await userModel.findOne({ email });
     if (!user) {
       return new Response(JSON.stringify({ message: 'User not found' }), { status: 404 });
@@ -41,5 +43,6 @@ export async function POST(req) {
     }), { status: 500 });
 
   }
+
  
 }
