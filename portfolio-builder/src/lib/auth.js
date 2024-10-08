@@ -2,10 +2,15 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 //function to hash a password to store it in db
-const saltString= process.env.BCRYPT_SALT_String
 export async function hashPassword(password) {
-  const hashedPassword = await bcrypt.hash(password, saltString);
-  return hashedPassword;
+
+  try{
+    const salt = await bcrypt.genSalt(10); // Generate salt
+    const hash = await bcrypt.hash(password, salt); // Hash password with salt
+    return hash;
+  }catch(error){
+  }
+
 }
 
 
@@ -18,7 +23,7 @@ export async function verifyPassword(password, hashedPassword) {
 // Function to generate a JWT token
 export function generateToken(id) {
   const token = jwt.sign(
-    id ,
+    {id },
     process.env.JWT_SECRET,
     {
       expiresIn: '3600m',
