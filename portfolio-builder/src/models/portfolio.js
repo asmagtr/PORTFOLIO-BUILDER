@@ -24,11 +24,13 @@ const portfolioSchema = new mongoose.Schema({
         githubLink: { type: String },
         liveDemoLink: { type: String },
       }],
-      
+
       phoneNumber:{type:String,  minlength: 10},
       linkedIn:{type:String},
       instagram:{type:String},
       facebook:{type:String},
+      userId:{type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'},
 
   });
 
