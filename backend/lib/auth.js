@@ -1,8 +1,10 @@
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+
+const bcrypt = require("bcrypt")
+const jwt = require("jsonwebtoken")
+
 
 //function to hash a password to store it in db
-export async function hashPassword(password) {
+async function hashPassword(password) {
 
   try{
     const salt = await bcrypt.genSalt(10); // Generate salt
@@ -15,13 +17,13 @@ export async function hashPassword(password) {
 
 
 // function to verify if the password provided by the user is correct
-export async function verifyPassword(password, hashedPassword) {
+async function verifyPassword(password, hashedPassword) {
   const isValid = await bcrypt.compare(password, hashedPassword);
   return isValid;
 }
 
 // Function to generate a JWT token
-export function generateToken(id) {
+function generateToken(id) {
   const token = jwt.sign(
     {id },
     process.env.JWT_SECRET,
@@ -34,7 +36,7 @@ export function generateToken(id) {
 }
 
 // Function to verify a JWT token
-export function verifyToken(token) {
+function verifyToken(token) {
   try {
     const data = jwt.verify(token, process.env.JWT_SECRET);
     return data; 
@@ -42,3 +44,10 @@ export function verifyToken(token) {
     return null; 
   }
 }
+
+module.exports = {
+  hashPassword,
+  verifyPassword,
+  generateToken,
+  verifyToken
+};
