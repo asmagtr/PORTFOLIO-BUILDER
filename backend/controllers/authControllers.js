@@ -9,27 +9,42 @@ async function signUp(req, res) {
     const { email, password ,username} = req.body;
 
     if (!username) {
-        return res.status(400).json({ message: 'Provide a username' });
+        return res.status(400).json({ 
+            error:true,
+            message: 'Provide a username' 
+        });
     }
   
     if (!email) {
-        return res.status(400).json({ message: 'Provide an email' });
+        return res.status(400).json({ 
+            error:true,
+            message: 'Provide an email'
+         });
     }
     
     if (!password) {
-        return res.status(400).json({ message: 'Enter the password' });
+        return res.status(400).json({ 
+            error:true,
+            message: 'Enter the password'
+         });
     }
   
     try{
         const existingEmailUser = await User.findOne({ email });
         if (existingEmailUser) {
-            return res.status(400).json({ message: 'Email already exists. Please use a different email.' });
+            return res.status(400).json({
+                error:true,
+                message: 'Email already exists. Please use a different email.' 
+            });
         }
     
         // Check if the username already exists
         const existingUsernameUser = await User.findOne({ username });
         if (existingUsernameUser) {
-            return res.status(400).json({ message: 'Username already exists. Please pick another username.' });
+            return res.status(400).json({
+                 error:true,
+                 message: 'Username already exists. Please pick another username.'
+                 });
         }
 
 
@@ -44,13 +59,17 @@ async function signUp(req, res) {
     
       const token = generateToken(newUser._id);
     
-      res.status(201).json({ message: 'User created successfully',token });
+      return res.status(201).json({
+         error:false,
+         message: 'User created successfully',
+         token });
 
 
     }catch(error){
         return res.status(500).json({ 
+            error:true,
             message: 'Server error',
-            error
+            errormessage:error
         });
   
     }
@@ -64,7 +83,8 @@ async function login(req,res){
 
     const {emailOrUsername,password}=req.body;
     if(!emailOrUsername){
-        return res.status(400).json({error:true,
+        return res.status(400).json({
+            error:true,
             message:"ENter Email or Username"});
     }
     if(!password){
@@ -118,4 +138,10 @@ async function login(req,res){
     }
  
 
+}
+
+
+module.exports={
+    signUp,
+    login
 }
