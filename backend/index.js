@@ -1,7 +1,8 @@
 const express=require("express");
 const cors=require("cors");
 require('dotenv').config();
-const connectToDB=require("./lib/dbConnect")
+const connectToDB=require("./lib/dbConnect");
+const authRoutes=require("./routes/authRoutes");
 
 
 
@@ -11,6 +12,9 @@ app.use(cors({
     origin: '*'
   }));
   app.use(express.json());
+
+
+  app.use("/api/auth",authRoutes)
 
  
 
