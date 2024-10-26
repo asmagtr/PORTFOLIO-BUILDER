@@ -1,5 +1,5 @@
-const userModel = require('../models/user'); 
-const { hashPassword, generateToken } = require('../lib/auth'); 
+const User = require('../models/user'); 
+const { hashPassword, generateToken,verifyPassword } = require('../lib/auth'); 
 
 
 //function to create account
@@ -51,8 +51,8 @@ async function signUp(req, res) {
 
         const hashedPassword = await hashPassword(password);
 
-        const newUser = await userModel.create({
-          fullName,
+        const newUser = await User.create({
+          username,
           email,
           password: hashedPassword,
         });
@@ -66,6 +66,7 @@ async function signUp(req, res) {
 
 
     }catch(error){
+        console.log(error)
         return res.status(500).json({ 
             error:true,
             message: 'Server error',
@@ -95,10 +96,10 @@ async function login(req,res){
 
     try{
            //first we look if the provided body has an email 
-    let userInfo=await userModel.findOne({email:emailOrUsername});
+    let userInfo=await User.findOne({email:emailOrUsername});
    //if not than we look for an account with that username
    if(!userInfo){
-    userInfo =await userModel.findOne({username:emailOrUsername});
+    userInfo =await User.findOne({username:emailOrUsername});
    }
 
    if(!userInfo){
@@ -109,7 +110,7 @@ async function login(req,res){
    }
 
   
-    const isValidPassword = await hash.comparePassword(password, userInfo.password);
+    const isValidPassword = await verifyPassword(password, userInfo.password);
 
 
     if(!isValidPassword){
@@ -130,6 +131,7 @@ async function login(req,res){
     }
 
     }catch(error){
+        console.log(error)
           
         return res.status(500).json({
             error:true,
