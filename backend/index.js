@@ -25,17 +25,19 @@ cloudinary.config({
 
 });
   const multer = require('multer');
-  const storage = multer.memoryStorage();
-  const upload = multer({ storage });
+  // const storage = multer.memoryStorage();
+  // const upload = multer({ storage });
+   const upload=require("./middlewares/multer")
   const Portfolio=require("./models/portfolio")
 
 
-  app.post('/upload',  upload.fields([
+  app.post('/upload', upload.fields([
     { name: 'profilePicture', maxCount: 1 },
-    { name: 'resume', maxCount: 1 },
+    { name: 'resume', maxCount: 1 }, 
     { name: 'projects[0].projectImage', maxCount: 1 },
     { name: 'projects[1].projectImage', maxCount: 1 }// Adjust maxCount based on expected projects
 ]), async (req, res) => {
+  console.log(req.files)
   try {
     // Extract basic fields from req.body
     const { email, fullName, profession, bio, phoneNumber, linkedIn, instagram, facebook, userId } = req.body;
