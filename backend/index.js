@@ -3,7 +3,7 @@ const cors=require("cors");
 require('dotenv').config();
 const connectToDB=require("./lib/dbConnect");
 const authRoutes=require("./routes/authRoutes");
-const skillRoutes=require("./routes/skillsRoutes")
+const skillsRoutes=require("./routes/skillsRoutes")
 
 
 
